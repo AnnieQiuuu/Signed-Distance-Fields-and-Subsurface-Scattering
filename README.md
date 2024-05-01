@@ -1,7 +1,18 @@
+Name: Annie Qiu
+Pennkey: annieqiu
+======================
 Signed Distance Fields and Subsurface Scattering
 ======================
 
 **University of Pennsylvania, CIS 561: Advanced Computer Graphics, Homework 8**
+My results
+------------
+Pingu
+![](./results/OnePingu.mp4)
+
+ManyPigs
+![](./results/ManyPigs.mp4)
+
 
 Overview
 ------------
