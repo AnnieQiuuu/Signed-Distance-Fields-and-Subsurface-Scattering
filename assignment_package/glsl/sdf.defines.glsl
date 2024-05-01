@@ -595,12 +595,12 @@ BSDF BSDF_Pig(vec3 query, vec3 c) {
 
 
 float sceneSDF(vec3 query) {
-# if 1
+# if 0
     //For Pingu SDF
     return SDF_Pingu(query);
 # endif
 
-# if 0
+# if 1
     //For Pig SDF
     vec3 spacing = vec3(10.0+clamp(cos(query.z * sin(u_Time*0.01)),-1.0,1.0),10 + clamp(sin(query.z*sin(u_Time*0.01)),-1.0,1.0),10.0);
     return opRepetitionPig(query, spacing);
@@ -610,12 +610,12 @@ float sceneSDF(vec3 query) {
 
 
 BSDF sceneBSDF(vec3 query,vec3 repeatPeriod) {
-# if 1
+# if 0
     //For Pingu BSDF
     return BSDF_Pingu (query);
 # endif
 
-# if 0
+# if 1
     //For Pig BSDF
     return BSDF_Pig (query, repeatPeriod);
 # endif
