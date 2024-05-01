@@ -5,13 +5,22 @@ Signed Distance Fields and Subsurface Scattering
 ======================
 
 **University of Pennsylvania, CIS 561: Advanced Computer Graphics, Homework 8**
-My results
+My results (All uploaded in result page)
 ------------
 Pingu
-![](./results/OnePingu.mp4)
+https://drive.google.com/file/d/1f_6SebbEDVSiv4oMNMEEpg6tscqA_fsj/view?usp=sharing
+![](results/OnePingu.mp4)
 
 ManyPigs
-![](./results/ManyPigs.mp4)
+https://drive.google.com/file/d/1hYVYZvRlc6O8l7mJJc-C2bLkgRlRD_oW/view?usp=sharing
+![](results/ManyPigs.mp4)
+
+Instructions:
+You can change the #if 0 ---> # if 1 inside the function "sceneSDF" and "sceneBSDF"
+in "sdf.defines.glsl" for the scene you want to see. Please make sure there's only 
+one #if 1 when you run the program. The following picture is the screenshot of where
+the comment #if 0 and #if 1 are.
+![](results/changeScene.png)
 
 
 Overview
