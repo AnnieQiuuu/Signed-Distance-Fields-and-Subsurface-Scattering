@@ -51,7 +51,8 @@ struct BSDF {
     float subsurfaceGlow;
     float subsurfaceScale;
     float subsurfaceDistortion;
-
+    //self added
+    float opacity;
 };
 
 struct MarchResult {
@@ -220,7 +221,7 @@ BSDF BSDF_Wahoo(vec3 query) {
     // Head base
     //deafult to skin color
     BSDF result = BSDF(query, normalize(query), pow(vec3(239, 181, 148) / 255., vec3(2.2)),
-                       0., 0.7, 1., 0.0, 0.0, 0.0, 0.0);
+                       0., 0.7, 1., 0.0, 0.0, 0.0, 0.0, 1.0);
 
     result.nor = SDF_Normal(query);
 
@@ -460,7 +461,7 @@ BSDF BSDF_Pingu(vec3 query) {
     // Head base
     //deafult to black color
     BSDF result = BSDF(query, normalize(query), pow(vec3(0, 0, 0) / 255., vec3(2.2)),
-                       0., 0.7, 1., 0.0, 0.0, 0.0, 0.0);
+                       0., 0.7, 1., 0.0, 6.0, 3.2, 1., 1.0);
 
     result.nor = SDF_Normal(query);
 
@@ -477,12 +478,17 @@ BSDF BSDF_Pingu(vec3 query) {
     float expressionTime = sin(u_Time * 0.5);
     if(expressionTime > 0.3 && expressionTime < 0.8){
         if(drop < head && drop < body && drop < belly && drop < foot && drop < eyes && drop < eyeballs) {
+            result.roughness = 0.0f;
+            result.opacity = 0.4f;
             result.albedo = pow(vec3(63, 183, 252) / 255., vec3(2.2));
         }
     }
 
     if(mouth < head && mouth < body && mouth < belly && mouth < foot && mouth < eyes && mouth < eyeballs && mouth < drop) {
 
+        result.subsurfaceDistortion = 0.1;
+        result.subsurfaceScale = 0.01;
+        result.subsurfaceDistortion = 0.01;
         result.albedo = pow(vec3(184,38,13) / 255., vec3(2.2));
     }
 
@@ -490,6 +496,7 @@ BSDF BSDF_Pingu(vec3 query) {
     float blinkTime = sin(u_Time * 0.8);
     if(eyes < head && eyes < body && eyes < belly && eyes < foot && eyes < mouth && eyes < eyeballs && eyes < drop) {
 
+        result.roughness = 0.3f;
         if(blinkTime > 0.1 && blinkTime < 0.2){
              result.albedo = pow(vec3(0,0,0), vec3(2.2));
         }else{
@@ -499,6 +506,7 @@ BSDF BSDF_Pingu(vec3 query) {
 
     if(eyeballs < head && eyeballs < body && eyeballs < belly && eyeballs < foot && eyeballs < mouth && eyeballs < eyes && eyeballs < drop) {
         result.albedo = pow(vec3(0,0,0), vec3(2.2));
+        result.roughness = 0.1f;
     }
 
     if(belly < head && belly < body && belly < mouth && belly < foot && belly < eyes && belly < eyeballs && belly < belly2) {
@@ -512,7 +520,9 @@ BSDF BSDF_Pingu(vec3 query) {
     }
 
     if(foot < head && foot < body && foot < mouth && foot < belly && foot < belly2) {
-
+        result.subsurfaceDistortion = 0.1;
+        result.subsurfaceScale = 0.01;
+        result.subsurfaceDistortion = 0.01;
         result.albedo = pow(vec3(235, 110, 21) / 255., vec3(2.2));
     }
 
@@ -565,7 +575,7 @@ vec3 changeColor() {
 
 BSDF BSDF_Pig(vec3 query, vec3 c) {
     BSDF result = BSDF(query, normalize(query), pow(vec3(0.,0.,0.) / 255., vec3(2.2)),
-                      0., 0, 1., 0.0, 0.0, 0.0, 0.0);
+                      0., 0, 1., 0.0, 6.0, 0.8, 0.2,1.0);
     vec3 norm = SDF_Normal(query);
     float ao = CalculateAO(query, norm);
     result.nor = norm;
@@ -595,34 +605,39 @@ BSDF BSDF_Pig(vec3 query, vec3 c) {
 
 
 float sceneSDF(vec3 query) {
-# if 1
+# if 0
     //For Pingu SDF
     return SDF_Pingu(query);
 # endif
 
-# if 0
+# if 1
     //For Pig SDF
     vec3 spacing = vec3(10.0+clamp(cos(query.z * sin(u_Time*0.01)),-1.0,1.0),10 + clamp(sin(query.z*sin(u_Time*0.01)),-1.0,1.0),10.0);
     return opRepetitionPig(query, spacing);
 # endif
+
+# if 0
+    return SDF_Sphere(query,vec3(0.),1);
+# endif
 }
 
 
-
+// pos; nor; albedo; metallic; roughness; ao; thinness; subsurfaceGlow; subsurfaceScale; subsurfaceDistortion;opacity;
 BSDF sceneBSDF(vec3 query,vec3 repeatPeriod) {
-# if 1
+# if 0
     //For Pingu BSDF
     return BSDF_Pingu (query);
 # endif
 
-# if 0
+# if 1
     //For Pig BSDF
     return BSDF_Pig (query, repeatPeriod);
 # endif
 
  # if 0
     //For subsurface Sphere
+    // subsurface distortion of 0.2, subsurface glow of 6.0, subsurface scale of 3.0
     return BSDF(query, normalize(query), vec3(1, 1, 1),
-                0., 0.2, 1., 0.0, 0.0, 0.0, 0.0);
+                0., 0.2, 1., 0.0, 6.0, 3.0, 0.2, 1.0);
 # endif
 }

@@ -8,12 +8,20 @@ Signed Distance Fields and Subsurface Scattering
 My results (All uploaded in result page)
 ------------
 Pingu
-https://drive.google.com/file/d/1f_6SebbEDVSiv4oMNMEEpg6tscqA_fsj/view?usp=sharing
-![](results/OnePingu.mp4)
+![](results/pingu1.png)
+
+![](results/pingu2.png)
+
+https://drive.google.com/file/d/1F8uGOLzCBaBVzspWNjRqYkVqmkgA2aEn/view?usp=sharing
+![](results/pingu.mp4)
 
 ManyPigs
-https://drive.google.com/file/d/1hYVYZvRlc6O8l7mJJc-C2bLkgRlRD_oW/view?usp=sharing
-![](results/ManyPigs.mp4)
+![](results/pigs1.png)
+
+![](results/pigs2.png)
+
+https://drive.google.com/file/d/1LBoxQRjkLIDNTU1cxw-NqJ2RSK_naI8s/view?usp=sharing
+![](results/pigs.mp4)
 
 Instructions:
 You can change the #if 0 ---> # if 1 inside the function "sceneSDF" and "sceneBSDF"

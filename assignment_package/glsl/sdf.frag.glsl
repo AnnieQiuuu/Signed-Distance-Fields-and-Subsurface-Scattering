@@ -24,7 +24,6 @@ MarchResult raymarch(Ray ray) {
     for(int i = 0; i < MAX_ITERATIONS; ++i) {
         vec3 samplePoint = origin + direction * t;
         vec3 repeatPeriod =vec3(10.0+clamp(cos(samplePoint.z * sin(u_Time*0.01)),-1.0,1.0),10 + clamp(sin(samplePoint.z*sin(u_Time*0.01)),-1.0,1.0),10.0);
-//        vec3 repeatPeriod =vec3(10);
         float distance = sceneSDF(samplePoint);
         if (distance < THICKNESS) {
             BSDF bsdf = sceneBSDF(samplePoint, repeatPeriod);
@@ -36,7 +35,7 @@ MarchResult raymarch(Ray ray) {
         }
     }
     //if hit nothing
-    return MarchResult(-1, 0, BSDF(vec3(0.), vec3(0.), vec3(0.), 0., 0., 0., 0., 0., 0., 0.));
+    return MarchResult(-1, 0, BSDF(vec3(0.), vec3(0.), vec3(0.), 0., 0., 0., 0., 0., 0., 0.,0.));
 }
 
 #define K_COEFF 2
@@ -63,9 +62,6 @@ vec3 subsurfaceColor(vec3 lightDir, vec3 normal, vec3 viewVec, BSDF bsdf) {
 
 
 
-#define DISTORTION 0.2
-#define GLOW 6.0
-#define SCALE 3.f
 //I also add those into BSDF struct
 void main()
 {
@@ -76,12 +72,8 @@ void main()
     bsdf.pos = pos;
     float thinness = subsurfaceThickness(bsdf.pos,bsdf.nor,K_COEFF);
     bsdf.thinness = thinness;
-    bsdf.subsurfaceGlow = GLOW;
-    bsdf.subsurfaceScale = SCALE;
-    bsdf.subsurfaceDistortion = DISTORTION;
     vec3 viewVec = normalize(u_CamPos - pos);
-    vec3 reflectedLightDir = reflect(viewVec, normalize(bsdf.nor));
-    vec3 lightDir = -normalize(reflectedLightDir);
+    vec3 lightDir = ray.direction;
     vec3 subsurface = subsurfaceColor(lightDir,bsdf.nor,viewVec, bsdf);
 
     vec3 color = metallic_plastic_LTE(bsdf, -ray.direction) +  subsurface * (1.0 - bsdf.metallic);
@@ -91,6 +83,12 @@ void main()
     // Gamma correction
     color = pow(color, vec3(1.0/2.2));
 
-    out_Col = vec4(color, result.hitSomething > 0 ? 1. : 0.);
+//    out_Col = vec4(color, result.hitSomething > 0 ? 1. : 0.);
+    //I add opacity
+    if(result.hitSomething>0){
+        out_Col = vec4(color, bsdf.opacity);
+    }else{
+        out_Col = vec4(color, 0.);
+    }
 }
 
