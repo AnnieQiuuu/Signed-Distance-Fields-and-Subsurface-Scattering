@@ -1,4 +1,3 @@
-======================
 Signed Distance Fields and Subsurface Scattering
 ======================
 
